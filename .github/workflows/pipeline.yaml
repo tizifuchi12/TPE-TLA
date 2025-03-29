@@ -1,0 +1,30 @@
+# @see https://docs.github.com/en/actions
+jobs:
+  Integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Pull repository."
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: "Install dependencies."
+        run: |
+          sudo apt-get update --yes
+          chmod u+x --recursive script/ubuntu
+          script/ubuntu/install.sh
+      - name: "Build solution."
+        run: |
+          script/ubuntu/build.sh
+      - name: "Test solution."
+        run: |
+          script/ubuntu/test.sh
+
+name: "CI"
+
+# @see https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+on:
+  pull_request:
+    types:
+      - closed
+      - reopened
+  push:

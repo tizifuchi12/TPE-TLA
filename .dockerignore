@@ -1,0 +1,23 @@
+# Folders.
+.DS_Store/
+/.git/
+/.vs/
+/.vscode/
+/bin/
+/build/
+/cache/
+/log/
+/node_modules/
+/obj/
+
+# Files.
+.DS_Store
+.env*
+*.csproj.user
+*~
+
+# Application specific.
+/program
+BisonParser.c
+BisonParser.h
+FlexScanner.c
