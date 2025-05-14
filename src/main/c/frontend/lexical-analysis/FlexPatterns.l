@@ -36,17 +36,14 @@ DURATION_HOURS   ({FLOAT}|{INT})h
 
 %%
 
-// Comentarios multilínea
 "/*"								{ BEGIN(MULTILINE_COMMENT); BeginMultilineCommentLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>"*/"				{ EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
 <MULTILINE_COMMENT>[[:space:]]+		{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
-// Comentarios de una línea
 "//".*                           { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
-// Palabras clave
 "university"                       { return KeywordLexemeAction(createLexicalAnalyzerContext(), UNIVERSITY); }
 "is"                               { return KeywordLexemeAction(createLexicalAnalyzerContext(), IS); }
 "open"                             { return KeywordLexemeAction(createLexicalAnalyzerContext(), OPEN); }
@@ -84,13 +81,11 @@ DURATION_HOURS   ({FLOAT}|{INT})h
 "between"                          { return KeywordLexemeAction(createLexicalAnalyzerContext(), BETWEEN); }
 "and"                              { return KeywordLexemeAction(createLexicalAnalyzerContext(), AND); }
 
-// Literales
 {DAY}                              { return DayLexemeAction(createLexicalAnalyzerContext()); }
 {TIME}                             { return TimeLexemeAction(createLexicalAnalyzerContext()); }
 {STRING}                           { return StringLiteralLexemeAction(createLexicalAnalyzerContext()); }
 {DURATION_HOURS}                   { return DurationLexemeAction(createLexicalAnalyzerContext()); }
 
-// Otros tokens
 "="                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), EQUAL); }
 "{"                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACE); }
 "}"                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
@@ -98,7 +93,6 @@ DURATION_HOURS   ({FLOAT}|{INT})h
 ":"                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), COLON); }
 "."                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), DOT); }
 
-// Identificadores
 {ID}                               { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
