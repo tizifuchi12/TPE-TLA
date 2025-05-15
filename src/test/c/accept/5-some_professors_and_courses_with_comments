@@ -1,0 +1,35 @@
+// Definicion del primer curso
+course Math101 {
+    name: "Mathematics 101";
+    hours: 4; 
+}
+
+// Primer profesor disponible
+professor Ana {
+    name: "Ana Maria Arias Roig";
+}
+
+// Segundo curso ofrecido
+course Phys101 { // Comentario al lado
+    name: "Physics 101";
+    // Comentario en la siguiente linea
+    hours: 3;
+}
+
+// Segundo profesor
+professor Agustin {
+    name: "Agustin Golmar";
+}
+
+// Tercer curso para testeo
+course Chem101 {
+    name: "Chemistry 101";
+    hours: 5;
+}
+
+// Otro profesor mas
+professor Luis {
+    name: "Luis Gomez"; // Comentario adentro
+}
+
+// Final

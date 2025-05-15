@@ -20,7 +20,7 @@ DIGIT           [0-9]
 HOUR            0?{DIGIT}|1{DIGIT}|2[0-3]
 MINUTE          0?{DIGIT}|[1-5]{DIGIT}
 TIME            {HOUR}:{MINUTE}
-DAY             (monday|tuesday|wednesday|thursday|friday|saturday|sunday)
+DAY             (MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY|EVERYDAY)
 ID              [a-zA-Z_][a-zA-Z0-9_]*
 STRING          \"[^\"]*\"
 INT              {DIGIT}+
@@ -42,58 +42,21 @@ DURATION_HOURS   ({FLOAT}|{INT})h
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
-"//".*                           { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+"//".*                              { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
-"university"                       { return KeywordLexemeAction(createLexicalAnalyzerContext(), UNIVERSITY); }
-"is"                               { return KeywordLexemeAction(createLexicalAnalyzerContext(), IS); }
-"open"                             { return KeywordLexemeAction(createLexicalAnalyzerContext(), OPEN); }
-"from"                             { return KeywordLexemeAction(createLexicalAnalyzerContext(), FROM); }
-"to"                               { return KeywordLexemeAction(createLexicalAnalyzerContext(), TO); }
-"on"                               { return KeywordLexemeAction(createLexicalAnalyzerContext(), ON); }
+"course"                        { return KeywordLexemeAction(createLexicalAnalyzerContext(), COURSE); }
+"professor"                     { return KeywordLexemeAction(createLexicalAnalyzerContext(), PROFESSOR); }
+"name"                          { return KeywordLexemeAction(createLexicalAnalyzerContext(), NAME); }
+"hours"                         { return KeywordLexemeAction(createLexicalAnalyzerContext(), HOURS); }
 
-"course"                           { return KeywordLexemeAction(createLexicalAnalyzerContext(), COURSE); }
-"requires"                         { return KeywordLexemeAction(createLexicalAnalyzerContext(), REQUIRES); }
-"in"                               { return KeywordLexemeAction(createLexicalAnalyzerContext(), IN); }
-"at"                               { return KeywordLexemeAction(createLexicalAnalyzerContext(), AT); }
-
-"classroom"                        { return KeywordLexemeAction(createLexicalAnalyzerContext(), CLASSROOM); }
-"has"                              { return KeywordLexemeAction(createLexicalAnalyzerContext(), HAS); }
-
-"professor"                        { return KeywordLexemeAction(createLexicalAnalyzerContext(), PROFESSOR); }
-"available"                        { return KeywordLexemeAction(createLexicalAnalyzerContext(), AVAILABLE); }
-
-"duration"                         { return KeywordLexemeAction(createLexicalAnalyzerContext(), DURATION); }
-"credits"                          { return KeywordLexemeAction(createLexicalAnalyzerContext(), CREDITS); }
-
-"preference"                       { return KeywordLexemeAction(createLexicalAnalyzerContext(), PREFERENCE); }
-"teaches"                          { return KeywordLexemeAction(createLexicalAnalyzerContext(), TEACHES); }
-
-"students"                         { return KeywordLexemeAction(createLexicalAnalyzerContext(), STUDENTS); }
-"require"                          { return KeywordLexemeAction(createLexicalAnalyzerContext(), REQUIRE); }
-"can"                              { return KeywordLexemeAction(createLexicalAnalyzerContext(), CAN); }
-"teach"                            { return KeywordLexemeAction(createLexicalAnalyzerContext(), TEACH); }
-"everyday"                         { return KeywordLexemeAction(createLexicalAnalyzerContext(), EVERYDAY); }
-"after"                            { return KeywordLexemeAction(createLexicalAnalyzerContext(), AFTER); }
-"preferences"                      { return KeywordLexemeAction(createLexicalAnalyzerContext(), PREFERENCES); }
-"prefers"                          { return KeywordLexemeAction(createLexicalAnalyzerContext(), PREFERS); }
-
-"class"                            { return KeywordLexemeAction(createLexicalAnalyzerContext(), CLASS); }
-"between"                          { return KeywordLexemeAction(createLexicalAnalyzerContext(), BETWEEN); }
-"and"                              { return KeywordLexemeAction(createLexicalAnalyzerContext(), AND); }
-
-{DAY}                              { return DayLexemeAction(createLexicalAnalyzerContext()); }
-{TIME}                             { return TimeLexemeAction(createLexicalAnalyzerContext()); }
-{STRING}                           { return StringLiteralLexemeAction(createLexicalAnalyzerContext()); }
-{DURATION_HOURS}                   { return DurationLexemeAction(createLexicalAnalyzerContext()); }
-
-"="                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), EQUAL); }
-"{"                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACE); }
-"}"                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
-","                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), COMMA); }
-":"                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), COLON); }
-"."                                { return SymbolLexemeAction(createLexicalAnalyzerContext(), DOT); }
-
-{ID}                               { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
+{ID}                            { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
+{STRING}                        { return StringLexemeAction(createLexicalAnalyzerContext()); }  
+{INT}                           { return IntegerLexemeAction(createLexicalAnalyzerContext()); }
+ 
+"{"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), LBRACE); }  
+"}"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), RBRACE); }
+":"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), COLON); }
+";"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), SEMICOLON); }
 
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }

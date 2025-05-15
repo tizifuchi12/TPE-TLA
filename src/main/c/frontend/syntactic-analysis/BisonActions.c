@@ -2,14 +2,17 @@
 
 /* MODULE INTERNAL STATE */
 
-static Logger * _logger = NULL;
+static Logger *_logger = NULL;
 
-void initializeBisonActionsModule() {
+void initializeBisonActionsModule()
+{
 	_logger = createLogger("BisonActions");
 }
 
-void shutdownBisonActionsModule() {
-	if (_logger != NULL) {
+void shutdownBisonActionsModule()
+{
+	if (_logger != NULL)
+	{
 		destroyLogger(_logger);
 	}
 }
@@ -20,67 +23,125 @@ extern unsigned int flexCurrentContext(void);
 
 /* PRIVATE FUNCTIONS */
 
-static void _logSyntacticAnalyzerAction(const char * functionName);
+static void _logSyntacticAnalyzerAction(const char *functionName);
 
 /**
  * Logs a syntactic-analyzer action in DEBUGGING level.
  */
-static void _logSyntacticAnalyzerAction(const char * functionName) {
+static void _logSyntacticAnalyzerAction(const char *functionName)
+{
 	logDebugging(_logger, "%s", functionName);
 }
 
 /* PUBLIC FUNCTIONS */
 
-Constant * IntegerConstantSemanticAction(const int value) {
+Attribute *createIntAttribute(char *key, int value)
+{
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Constant * constant = calloc(1, sizeof(Constant));
-	constant->value = value;
-	return constant;
+	Attribute *attribute = calloc(1, sizeof(Attribute));
+	attribute->key = key;
+	attribute->intValue = value;
+	attribute->isInt = true;
+	attribute->next = NULL;
+	return attribute;
 }
 
-Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type) {
+Attribute *createStringAttribute(char *key, char *value)
+{
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->leftExpression = leftExpression;
-	expression->rightExpression = rightExpression;
-	expression->type = type;
-	return expression;
+	Attribute *attribute = calloc(1, sizeof(Attribute));
+	attribute->key = key;
+	attribute->strValue = value;
+	attribute->isInt = false;
+	attribute->next = NULL;
+	return attribute;
 }
 
-Expression * FactorExpressionSemanticAction(Factor * factor) {
+Attribute *appendAttribute(Attribute *head, Attribute *newAttribute)
+{
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->factor = factor;
-	expression->type = FACTOR;
-	return expression;
+	if (head == NULL)
+	{
+		return newAttribute;
+	}
+	Attribute *current = head;
+	while (current->next != NULL)
+	{
+		current = current->next;
+	}
+	current->next = newAttribute;
+	return head;
 }
 
-Factor * ConstantFactorSemanticAction(Constant * constant) {
+Attribute *newAttributeList()
+{
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Factor * factor = calloc(1, sizeof(Factor));
-	factor->constant = constant;
-	factor->type = CONSTANT;
-	return factor;
+	return NULL;
 }
 
-Factor * ExpressionFactorSemanticAction(Expression * expression) {
+Entity *newEntityList()
+{
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Factor * factor = calloc(1, sizeof(Factor));
-	factor->expression = expression;
-	factor->type = EXPRESSION;
-	return factor;
+	return NULL;
 }
 
-Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression) {
+Entity *createCourse(char *id, Attribute *attributes)
+{
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Program * program = calloc(1, sizeof(Program));
-	program->expression = expression;
+	Course *course = calloc(1, sizeof(Course));
+	course->id = id;
+	course->attributes = attributes;
+
+	Entity *entity = calloc(1, sizeof(Entity));
+	entity->course = course;
+	entity->type = ENTITY_COURSE;
+	entity->next = NULL;
+	return entity;
+}
+
+Entity *createProfessor(char *id, Attribute *attributes)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Professor *professor = calloc(1, sizeof(Professor));
+	professor->id = id;
+	professor->attributes = attributes;
+
+	Entity *entity = calloc(1, sizeof(Entity));
+	entity->professor = professor;
+	entity->type = ENTITY_PROFESSOR;
+	entity->next = NULL;
+	return entity;
+}
+
+Entity *appendEntity(Entity *head, Entity *newEntity)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	if (head == NULL)
+	{
+		return newEntity;
+	}
+	Entity *current = head;
+	while (current->next != NULL)
+	{
+		current = current->next;
+	}
+	current->next = newEntity;
+	return head;
+}
+
+Program *newProgram(CompilerState *compilerState, Entity *entities)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program *program = calloc(1, sizeof(Program));
+	program->entities = entities;
 	compilerState->abstractSyntaxtTree = program;
-	if (0 < flexCurrentContext()) {
+	if (0 < flexCurrentContext())
+	{
 		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
 		compilerState->succeed = false;
 	}
-	else {
+	else
+	{
 		compilerState->succeed = true;
 	}
 	return program;

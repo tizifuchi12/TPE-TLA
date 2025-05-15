@@ -10,68 +10,65 @@ void initializeAbstractSyntaxTreeModule();
 /** Shutdown module's internal state. */
 void shutdownAbstractSyntaxTreeModule();
 
-/**
- * This typedefs allows self-referencing types.
- */
-
-typedef enum ExpressionType ExpressionType;
-typedef enum FactorType FactorType;
-
-typedef struct Constant Constant;
-typedef struct Expression Expression;
-typedef struct Factor Factor;
-typedef struct Program Program;
+typedef enum
+{
+	ENTITY_PROFESSOR,
+	ENTITY_COURSE
+} EntityType;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
 
-enum ExpressionType {
-	ADDITION,
-	DIVISION,
-	FACTOR,
-	MULTIPLICATION,
-	SUBTRACTION
-};
-
-enum FactorType {
-	CONSTANT,
-	EXPRESSION
-};
-
-struct Constant {
-	int value;
-};
-
-struct Factor {
-	union {
-		Constant * constant;
-		Expression * expression;
+typedef struct Attribute
+{
+	char *key; // "name", "hours", "available"
+	union
+	{
+		char *strValue;
+		int intValue;
 	};
-	FactorType type;
-};
+	int isInt;				// flag para saber qué tipo tiene
+	struct Attribute *next; // para lista enlazada simple
+} Attribute;
 
-struct Expression {
-	union {
-		Factor * factor;
-		struct {
-			Expression * leftExpression;
-			Expression * rightExpression;
-		};
+typedef struct Professor
+{
+	char *id;
+	Attribute *attributes;
+	struct Professor *next; // para lista de profesores
+} Professor;
+
+typedef struct Course
+{
+	char *id;
+	Attribute *attributes;
+	struct Course *next; // para lista de cursos
+} Course;
+
+typedef struct Entity
+{
+	union
+	{
+		Professor *professor;
+		Course *course;
 	};
-	ExpressionType type;
-};
+	struct Entity *next; // lista general de entidades
+	EntityType type;	 // tipo de entidad (profesor o curso)
+} Entity;
 
-struct Program {
-	Expression * expression;
-};
+typedef struct Program
+{
+	Entity *entities; // lista enlazada de entidades
+} Program;
 
 /**
  * Node recursive destructors.
  */
-void releaseConstant(Constant * constant);
-void releaseExpression(Expression * expression);
-void releaseFactor(Factor * factor);
-void releaseProgram(Program * program);
+void releaseAttribute(struct Attribute *attribute);
+void releaseProfessor(struct Professor *professor);
+void releaseCourse(struct Course *course);
+void releaseEntity(struct Entity *entity);
+void releaseProgram(Program *program);
 
 #endif

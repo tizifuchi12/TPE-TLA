@@ -18,11 +18,16 @@ void shutdownBisonActionsModule();
  * Bison semantic actions.
  */
 
-Constant * IntegerConstantSemanticAction(const int value);
-Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
-Expression * FactorExpressionSemanticAction(Factor * factor);
-Factor * ConstantFactorSemanticAction(Constant * constant);
-Factor * ExpressionFactorSemanticAction(Expression * expression);
-Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
+Program *newProgram(CompilerState *compilerState, Entity *entities);
+
+Entity *newEntityList();
+Entity *appendEntity(Entity *head, Entity *newEntity);
+Entity *createProfessor(char *id, Attribute *attributes);
+Entity *createCourse(char *id, Attribute *attributes);
+
+Attribute *newAttributeList();
+Attribute *appendAttribute(Attribute *head, Attribute *newAttribute);
+Attribute *createIntAttribute(char *key, int value);
+Attribute *createStringAttribute(char *key, char *value);
 
 #endif

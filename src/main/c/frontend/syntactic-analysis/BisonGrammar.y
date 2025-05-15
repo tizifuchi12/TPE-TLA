@@ -12,13 +12,17 @@
 
 	int integer;
 	Token token;
+	char * string;
 
 	/** Non-terminals. */
 
-	Constant * constant;
-	Expression * expression;
-	Factor * factor;
-	Program * program;
+	Program * program; // general program
+	Entity * entityList; // list of entities (professors and courses)
+	Entity * entity; // professor or course
+	Course * course; // course
+	Professor * professor; // professor
+	Attribute * attribute; // attribute for course or professor (hours, name, available, etc)
+	Attribute * attributeList; // list of attributes for course or professor
 }
 
 /**
@@ -37,20 +41,27 @@
 */
 
 /** Terminals. */
+%token <token> COURSE
+%token <token> PROFESSOR
+%token <token> NAME
+%token <token> HOURS
+
 %token <integer> INTEGER
-%token <token> ADD
-%token <token> CLOSE_PARENTHESIS
-%token <token> DIV
-%token <token> MUL
-%token <token> OPEN_PARENTHESIS
-%token <token> SUB
+%token <string> STRING
+%token <string> IDENTIFIER
+
+%token <token> LBRACE
+%token <token> RBRACE
+%token <token> COLON
+%token <token> SEMICOLON
 
 %token <token> UNKNOWN
 
 /** Non-terminals. */
-%type <constant> constant
-%type <expression> expression
-%type <factor> factor
+%type <entityList> entityList
+%type <entity> entity
+%type <attribute> attribute
+%type <attributeList> attributeList
 %type <program> program
 
 /**
@@ -58,28 +69,68 @@
  *
  * @see https://www.gnu.org/software/bison/manual/html_node/Precedence.html
  */
-%left ADD SUB
-%left MUL DIV
 
 %%
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 
-program: expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
-	;
+program:
+	entityList
+	{
+		// The program is a list of entities (professors and courses).
+		$$ = newProgram(currentCompilerState(), $1);
+	}
+;
 
-expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
-	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
-	| expression[left] MUL expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
-	| expression[left] SUB expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
-	| factor														{ $$ = FactorExpressionSemanticAction($1); }
-	;
+entityList:
+	entityList entity
+	{
+		// The entity list is a list of entities (professors and courses).
+		fprintf(stderr, "newEntityList\n");
+		$$ = appendEntity($1, $2);
+	}
+	| /* empty */
+	{
+		// The entity list is empty.
+		fprintf(stderr, "newEntityList\n");
+		$$ = newEntityList();
+	}
+;
 
-factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
-	| constant														{ $$ = ConstantFactorSemanticAction($1); }
-	;
+entity:
+	PROFESSOR IDENTIFIER LBRACE attributeList RBRACE
+	{
+		// The entity is a professor.
+		$$ = createProfessor($2, $4);
+	}
+	| COURSE IDENTIFIER LBRACE attributeList RBRACE
+	{
+		// The entity is a course.
+		$$ = createCourse($2, $4);
+	}
+;
 
-constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
-	;
+attributeList:
+	attributeList attribute
+	{
+		$$ = appendAttribute($1, $2);
+	}
+	| /* empty */
+	{
+		// The attribute list is empty.
+		$$ = newAttributeList();
+	}
+;
+
+attribute:
+    NAME COLON STRING SEMICOLON
+    {
+        $$ = createStringAttribute("name", $3);
+    }
+  | HOURS COLON INTEGER SEMICOLON
+    {
+        $$ = createIntAttribute("hours", $3);
+    }
+;
 
 %%
