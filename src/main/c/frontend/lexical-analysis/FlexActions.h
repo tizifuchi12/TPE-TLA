@@ -26,11 +26,14 @@ void EndMultilineCommentLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerCont
 void IgnoredLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext);
 
 Token KeywordLexemeAction(LexicalAnalyzerContext *LexicalAnalyzerContext, Token token);
-Token IdentifierLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext);
-Token StringLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext);
 Token SymbolLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext, Token token);
 
+Token IdentifierLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext);
+Token StringLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext);
 Token IntegerLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext);
+
+Token TimeLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext);
+Token DurationLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext);
 
 Token UnknownLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext);
 

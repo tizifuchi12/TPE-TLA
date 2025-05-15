@@ -12,6 +12,7 @@
 
 	int integer;
 	Token token;
+	Time time;
 	char * string;
 
 	/** Non-terminals. */
@@ -23,6 +24,10 @@
 	Professor * professor; // professor
 	Attribute * attribute; // attribute for course or professor (hours, name, available, etc)
 	Attribute * attributeList; // list of attributes for course or professor
+
+	Configuration configuration; // configuration of the university
+	UniversityOpen universityOpen; // university open
+	ClassDuration classDuration; // class duration
 }
 
 /**
@@ -33,22 +38,37 @@
  *
  * @see https://www.gnu.org/software/bison/manual/html_node/Destructor-Decl.html
  */
+
 /*
-%destructor { releaseConstant($$); } <constant>
-%destructor { releaseExpression($$); } <expression>
-%destructor { releaseFactor($$); } <factor>
+%destructor { releaseAttribute($$); } <attribute>
+%destructor { releaseEntity($$); } <entity>
+%destructor { releaseEntity($$); } <entityList>
+%destructor { releaseAttribute($$); } <attributeList>
 %destructor { releaseProgram($$); } <program>
 */
 
-/** Terminals. */
+/* Terminals. */
 %token <token> COURSE
 %token <token> PROFESSOR
 %token <token> NAME
 %token <token> HOURS
 
+%token <token> UNIVERSITY
+%token <token> OPEN
+%token <token> FROM
+%token <token> TO
+
+%token <token> CLASS
+%token <token> DURATION
+%token <token> BETWEEN
+%token <token> AND
+
 %token <integer> INTEGER
 %token <string> STRING
 %token <string> IDENTIFIER
+
+%token <integer> DURATION_HOURS
+%token <time> TIME
 
 %token <token> LBRACE
 %token <token> RBRACE
@@ -62,6 +82,9 @@
 %type <entity> entity
 %type <attribute> attribute
 %type <attributeList> attributeList
+%type <universityOpen> universityOpen
+%type <classDuration> classDuration
+%type <configuration> configuration
 %type <program> program
 
 /**
@@ -75,10 +98,41 @@
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 
 program:
-	entityList
+	configuration entityList
 	{
 		// The program is a list of entities (professors and courses).
-		$$ = newProgram(currentCompilerState(), $1);
+		$$ = newProgram(currentCompilerState(), $1, $2);
+	}
+;
+
+configuration:
+	universityOpen classDuration
+	{
+		$$ = createConfiguration($1, $2);
+	}
+	| universityOpen
+	{
+		$$ = createConfigurationWithoutClassDuration($1);
+	}
+	| classDuration universityOpen
+	{
+		$$ = createConfiguration($2, $1);
+	}
+;
+
+universityOpen:
+	UNIVERSITY OPEN FROM TIME TO TIME SEMICOLON
+	{
+		$$.openFrom = $4;
+		$$.openTo = $6;
+	}
+;
+
+classDuration:
+	CLASS DURATION BETWEEN DURATION_HOURS AND DURATION_HOURS SEMICOLON
+	{
+		$$.minHours = $4;
+		$$.maxHours = $6;
 	}
 ;
 

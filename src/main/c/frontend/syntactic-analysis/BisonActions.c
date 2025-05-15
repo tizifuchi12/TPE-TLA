@@ -129,10 +129,30 @@ Entity *appendEntity(Entity *head, Entity *newEntity)
 	return head;
 }
 
-Program *newProgram(CompilerState *compilerState, Entity *entities)
+Configuration createConfiguration(UniversityOpen universityOpen, ClassDuration classDuration)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Configuration configuration;
+	configuration.universityOpen = universityOpen;
+	configuration.classDuration = classDuration;
+	configuration.hasClassDuration = true;
+	return configuration;
+}
+
+Configuration createConfigurationWithoutClassDuration(UniversityOpen universityOpen)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Configuration configuration;
+	configuration.universityOpen = universityOpen;
+	configuration.hasClassDuration = false;
+	return configuration;
+}
+
+Program *newProgram(CompilerState *compilerState, Configuration configuration, Entity *entities)
 {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program *program = calloc(1, sizeof(Program));
+	program->configuration = configuration;
 	program->entities = entities;
 	compilerState->abstractSyntaxtTree = program;
 	if (0 < flexCurrentContext())

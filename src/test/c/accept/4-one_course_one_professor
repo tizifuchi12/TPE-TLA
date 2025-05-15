@@ -1,7 +1,0 @@
-professor JohnDoe {
-    name: "John Doe";
-}
-course Phys101 {
-    name: "Physics 101";
-    hours: 3;
-}

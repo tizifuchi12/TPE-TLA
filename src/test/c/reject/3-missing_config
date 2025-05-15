@@ -1,0 +1,4 @@
+course Algebra {
+  name: "Álgebra"
+  hours 6;
+}

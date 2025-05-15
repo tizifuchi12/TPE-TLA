@@ -46,6 +46,25 @@ typedef struct Course
 	struct Course *next; // para lista de cursos
 } Course;
 
+typedef struct
+{
+	Time openFrom;
+	Time openTo;
+} UniversityOpen;
+
+typedef struct
+{
+	int minHours;
+	int maxHours;
+} ClassDuration;
+
+typedef struct
+{
+	UniversityOpen universityOpen;
+	ClassDuration classDuration;
+	boolean hasClassDuration;
+} Configuration;
+
 typedef struct Entity
 {
 	union
@@ -59,7 +78,8 @@ typedef struct Entity
 
 typedef struct Program
 {
-	Entity *entities; // lista enlazada de entidades
+	Configuration configuration; // configuracion de la universidad
+	Entity *entities;			 // lista enlazada de entidades
 } Program;
 
 /**

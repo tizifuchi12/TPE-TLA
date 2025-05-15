@@ -111,3 +111,31 @@ Token IntegerLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext)
 	lexicalAnalyzerContext->semanticValue->integer = atoi(lexicalAnalyzerContext->lexeme);
 	return INTEGER;
 }
+
+Token TimeLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext)
+{
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	int hour = 0, minute = 0;
+	if (sscanf(lexicalAnalyzerContext->lexeme, "%d:%d", &hour, &minute) != 2)
+	{
+		return UNKNOWN;
+	}
+
+	lexicalAnalyzerContext->semanticValue->time.hour = hour;
+	lexicalAnalyzerContext->semanticValue->time.minute = minute;
+
+	return TIME;
+}
+
+Token DurationLexemeAction(LexicalAnalyzerContext *lexicalAnalyzerContext)
+{
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	int duration = 0;
+	if (sscanf(lexicalAnalyzerContext->lexeme, "%dh", &duration) != 1)
+	{
+		return UNKNOWN;
+	}
+	lexicalAnalyzerContext->semanticValue->integer = duration;
+	return DURATION_HOURS;
+}
