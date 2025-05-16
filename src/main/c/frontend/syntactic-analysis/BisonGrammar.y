@@ -30,6 +30,7 @@
 	Configuration configuration; // configuration of the university
 	UniversityOpen universityOpen; // university open
 	ClassDuration classDuration; // class duration
+	IntervalDayOfWeek intervalDayOfWeek; // interval of days of the week
 }
 
 /**
@@ -98,11 +99,14 @@
 %token <token> STUDENTS
 %token <token> REQUIRE
 
+%token <token> AVAILABLE
+
 %token <token> UNKNOWN
 
 /** Non-terminals. */
 %type <dayOfWeek> dayOfWeek
 %type <dayOfWeek> dayOfWeekOrEveryday
+%type <intervalDayOfWeek> intervalDayOfWeek
 
 %type <declarationList> declarationList
 %type <declaration> declaration
@@ -326,6 +330,11 @@ nameAttribute:
 
 professorAttribute:
 	nameAttribute
+	|
+	AVAILABLE intervalDayOfWeek SEMICOLON
+	{
+		$$ = createIntervalAttribute("available", $2);
+	}
 ;
 
 courseAttribute:
@@ -364,5 +373,19 @@ dayOfWeekOrEveryday:
     dayOfWeek { $$ = $1; }
   | EVERYDAY { $$ = DAY_EVERYDAY; }
 ;
+
+intervalDayOfWeek:
+    FROM TIME TO TIME ON dayOfWeek
+	{
+		$$.start = $2,
+		$$.end = $4;
+		$$.dayOfWeek = $6;
+	}
+	| FROM TIME TO TIME EVERYDAY
+	{
+		$$.start = $2,
+		$$.end = $4;
+		$$.dayOfWeek = DAY_EVERYDAY;
+	}
 
 %%

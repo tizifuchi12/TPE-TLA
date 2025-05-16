@@ -43,7 +43,7 @@ Attribute *createIntAttribute(char *key, int value)
 	Attribute *attribute = calloc(1, sizeof(Attribute));
 	attribute->key = key;
 	attribute->intValue = value;
-	attribute->isInt = true;
+	attribute->attributeType = ATTR_INT;
 	attribute->next = NULL;
 	return attribute;
 }
@@ -54,7 +54,18 @@ Attribute *createStringAttribute(char *key, char *value)
 	Attribute *attribute = calloc(1, sizeof(Attribute));
 	attribute->key = key;
 	attribute->strValue = value;
-	attribute->isInt = false;
+	attribute->attributeType = ATTR_STRING;
+	attribute->next = NULL;
+	return attribute;
+}
+
+Attribute *createIntervalAttribute(char *key, IntervalDayOfWeek interval)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Attribute *attribute = calloc(1, sizeof(Attribute));
+	attribute->key = key;
+	attribute->intervalValue = interval;
+	attribute->attributeType = ATTR_INTERVAL;
 	attribute->next = NULL;
 	return attribute;
 }

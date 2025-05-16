@@ -1,0 +1,5 @@
+university open from 8:00 to 22:00;
+
+professor prof3 {
+    available from 09:00 to 17:00 EVERYDAY;
+}

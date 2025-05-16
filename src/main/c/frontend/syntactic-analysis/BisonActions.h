@@ -45,6 +45,7 @@ Attribute *newAttributeList();
 Attribute *appendAttribute(Attribute *head, Attribute *newAttribute);
 Attribute *createIntAttribute(char *key, int value);
 Attribute *createStringAttribute(char *key, char *value);
+Attribute *createIntervalAttribute(char *key, IntervalDayOfWeek interval);
 
 Configuration createConfiguration(UniversityOpen universityOpen, ClassDuration classDuration);
 Configuration createConfigurationWithoutClassDuration(UniversityOpen universityOpen);

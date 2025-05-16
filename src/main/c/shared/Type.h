@@ -23,6 +23,13 @@ typedef enum
 	DAY_EVERYDAY
 } DayOfWeek;
 
+typedef struct
+{
+	Time start;
+	Time end;
+	DayOfWeek dayOfWeek;
+} IntervalDayOfWeek;
+
 typedef int Token;
 
 #endif

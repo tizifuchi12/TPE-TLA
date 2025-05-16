@@ -25,6 +25,13 @@ typedef enum
 
 typedef enum
 {
+	ATTR_INTERVAL,
+	ATTR_STRING,
+	ATTR_INT
+} AttributeType;
+
+typedef enum
+{
 	DECLARATION_ENTITY,
 	DECLARATION_PREFERENCE,
 	DECLARATION_DEMAND
@@ -41,8 +48,9 @@ typedef struct Attribute
 	{
 		char *strValue;
 		int intValue;
+		IntervalDayOfWeek intervalValue;
 	};
-	int isInt;				// flag para saber qué tipo tiene
+	AttributeType attributeType;
 	struct Attribute *next; // para lista enlazada simple
 } Attribute;
 

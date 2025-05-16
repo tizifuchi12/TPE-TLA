@@ -71,6 +71,8 @@ DURATION_HOURS   {INT}h
 "students"                      { return KeywordLexemeAction(createLexicalAnalyzerContext(), STUDENTS); }
 "require"                       { return KeywordLexemeAction(createLexicalAnalyzerContext(), REQUIRE); }
 
+"available"                     { return KeywordLexemeAction(createLexicalAnalyzerContext(), AVAILABLE); }
+
 "MONDAY"                        { return KeywordLexemeAction(createLexicalAnalyzerContext(), MONDAY); }
 "TUESDAY"                       { return KeywordLexemeAction(createLexicalAnalyzerContext(), TUESDAY); }
 "WEDNESDAY"                     { return KeywordLexemeAction(createLexicalAnalyzerContext(), WEDNESDAY); }
