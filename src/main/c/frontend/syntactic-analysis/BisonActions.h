@@ -23,9 +23,16 @@ Program *newProgram(CompilerState *compilerState, Configuration configuration, D
 Declaration *newDeclarationList();
 Declaration *appendDeclaration(Declaration *head, Declaration *newDeclaration);
 Declaration *createEntityDeclaration(Entity *entity);
+Declaration *createPreferenceDeclaration(Preference *preference);
 
-Entity *newEntityList();
-Entity *appendEntity(Entity *head, Entity *newEntity);
+Preference *createHardPreference();
+Preference *createSoftPreference();
+
+void setPreferenceProfessor(Preference *preference, char *professorId);
+void setPreferenceCourse(Preference *preference, char *courseId);
+void setPreferenceClassroom(Preference *preference, char *classroomId);
+void setPreferenceTime(Preference *preference, Time startTime, Time endTime);
+void setPreferenceDay(Preference *preference, DayOfWeek days);
 
 Entity *createProfessor(char *id, Attribute *attributes);
 Entity *createCourse(char *id, Attribute *attributes);

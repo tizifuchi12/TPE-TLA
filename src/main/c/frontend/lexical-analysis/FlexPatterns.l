@@ -20,11 +20,9 @@ DIGIT           [0-9]
 HOUR            0?{DIGIT}|1{DIGIT}|2[0-3]
 MINUTE          [0-5]{DIGIT}
 TIME            {HOUR}:{MINUTE}
-DAY             (MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY|EVERYDAY)
 ID              [a-zA-Z_][a-zA-Z0-9_]*
 STRING          \"[^\"]*\"
 INT              {DIGIT}+
-FLOAT            {DIGIT}+"."{DIGIT}+
 DURATION_HOURS   {INT}h
 
 /**
@@ -63,6 +61,19 @@ DURATION_HOURS   {INT}h
 "building"                      { return KeywordLexemeAction(createLexicalAnalyzerContext(), BUILDING); }
 "capacity"                      { return KeywordLexemeAction(createLexicalAnalyzerContext(), CAPACITY); }
 "has"                           { return KeywordLexemeAction(createLexicalAnalyzerContext(), HAS); }
+
+"teaches"                       { return KeywordLexemeAction(createLexicalAnalyzerContext(), TEACHES); }
+"teach"                         { return KeywordLexemeAction(createLexicalAnalyzerContext(), TEACH); }
+"on"                            { return KeywordLexemeAction(createLexicalAnalyzerContext(), ON); }
+"in"                            { return KeywordLexemeAction(createLexicalAnalyzerContext(), IN); }
+"prefers"                       { return KeywordLexemeAction(createLexicalAnalyzerContext(), PREFERS); }
+
+"MONDAY"                        { return KeywordLexemeAction(createLexicalAnalyzerContext(), MONDAY); }
+"TUESDAY"                       { return KeywordLexemeAction(createLexicalAnalyzerContext(), TUESDAY); }
+"WEDNESDAY"                     { return KeywordLexemeAction(createLexicalAnalyzerContext(), WEDNESDAY); }
+"THURSDAY"                      { return KeywordLexemeAction(createLexicalAnalyzerContext(), THURSDAY); }
+"FRIDAY"                        { return KeywordLexemeAction(createLexicalAnalyzerContext(), FRIDAY); }
+"EVERYDAY"                      { return KeywordLexemeAction(createLexicalAnalyzerContext(), EVERYDAY); }
 
 {ID}                            { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 {STRING}                        { return StringLexemeAction(createLexicalAnalyzerContext()); }  

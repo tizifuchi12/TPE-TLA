@@ -35,10 +35,19 @@ void releaseEntity(Entity *entity)
 		return;
 	if (entity->attributes)
 		releaseAttribute(entity->attributes);
-	if (entity->next)
-		releaseEntity(entity->next);
 
 	free(entity);
+}
+
+void releasePreference(Preference *preference)
+{
+	if (!preference)
+		return;
+	if (preference->details)
+	{
+		free(preference->details);
+	}
+	free(preference);
 }
 
 void releaseProgram(Program *program)
@@ -62,6 +71,9 @@ void releaseDeclaration(Declaration *declaration)
 	{
 	case DECLARATION_ENTITY:
 		releaseEntity(declaration->entity);
+		break;
+	case DECLARATION_PREFERENCE:
+		releasePreference(declaration->preference);
 		break;
 	default:
 		break;

@@ -13,6 +13,7 @@
 	int integer;
 	Token token;
 	Time time;
+	DayOfWeek dayOfWeek;
 	char * string;
 
 	/** Non-terminals. */
@@ -20,7 +21,7 @@
 	Program * program; // general program
 	Declaration * declarationList; // general declaration
 	Declaration * declaration; // general declaration
-	Entity * entityList; // list of entities (professors and courses)
+	Preference * preference; // general preference
 	Entity * entity; // professor, course or classroom
 	Attribute * attribute; // attribute for course or professor (hours, name, available, etc)
 	Attribute * attributeList; // list of attributes for course or professor
@@ -68,6 +69,19 @@
 %token <token> CAPACITY
 %token <token> HAS
 
+%token <token> MONDAY
+%token <token> TUESDAY
+%token <token> WEDNESDAY
+%token <token> THURSDAY
+%token <token> FRIDAY
+%token <token> EVERYDAY
+
+%token <token> TEACHES
+%token <token> TEACH
+%token <token> PREFERS
+%token <token> ON
+%token <token> IN
+
 %token <integer> INTEGER
 %token <string> STRING
 %token <string> IDENTIFIER
@@ -83,10 +97,15 @@
 %token <token> UNKNOWN
 
 /** Non-terminals. */
+%type <dayOfWeek> dayOfWeek
+%type <dayOfWeek> dayOfWeekOrEveryday
+
 %type <declarationList> declarationList
 %type <declaration> declaration
 
 %type <entity> entity
+
+%type <preference> preference
 
 /* Attribute validation */
 %type <attribute> professorAttribute
@@ -136,6 +155,67 @@ configuration:
 	}
 ;
 
+preference: 
+    IDENTIFIER TEACHES IDENTIFIER FROM TIME TO TIME ON dayOfWeek IN IDENTIFIER SEMICOLON
+	{
+		Preference *p = createHardPreference();
+		setPreferenceProfessor(p, $1);
+		setPreferenceCourse(p, $3);
+		setPreferenceClassroom(p, $11);
+		setPreferenceTime(p, $5, $7);
+		setPreferenceDay(p, $9);
+		$$ = p;
+	}
+	| IDENTIFIER TEACHES IDENTIFIER FROM TIME TO TIME ON dayOfWeek SEMICOLON
+	{
+		Preference *p = createHardPreference();
+		setPreferenceProfessor(p, $1);
+		setPreferenceCourse(p, $3);
+		setPreferenceTime(p, $5, $7);
+		setPreferenceDay(p, $9);
+		$$ = p;
+
+	}
+	| IDENTIFIER TEACHES IDENTIFIER ON dayOfWeek SEMICOLON
+	{
+		Preference *p = createHardPreference();
+		setPreferenceProfessor(p, $1);
+		setPreferenceCourse(p, $3);
+		setPreferenceDay(p, $5);
+		$$ = p;
+
+	}
+	| IDENTIFIER PREFERS TO TEACH IDENTIFIER FROM TIME TO TIME ON dayOfWeek IN IDENTIFIER SEMICOLON
+	{
+		Preference *p = createSoftPreference();
+		setPreferenceProfessor(p, $1);
+		setPreferenceCourse(p, $5);
+		setPreferenceClassroom(p, $13);
+		setPreferenceTime(p, $7, $9);
+		setPreferenceDay(p, $11);
+		$$ = p;
+
+	}
+	| IDENTIFIER PREFERS TO TEACH IDENTIFIER FROM TIME TO TIME ON dayOfWeek SEMICOLON
+	{
+		Preference *p = createSoftPreference();
+		setPreferenceProfessor(p, $1);
+		setPreferenceCourse(p, $5);
+		setPreferenceTime(p, $7, $9);
+		setPreferenceDay(p, $11);
+		$$ = p;
+
+	}
+	| IDENTIFIER PREFERS TO TEACH IDENTIFIER ON dayOfWeek SEMICOLON
+	{
+		Preference *p = createSoftPreference();
+		setPreferenceProfessor(p, $1);
+		setPreferenceCourse(p, $5);
+		setPreferenceDay(p, $7);
+		$$ = p;
+	}
+;
+
 universityOpen:
 	UNIVERSITY OPEN FROM TIME TO TIME SEMICOLON
 	{
@@ -168,6 +248,11 @@ declaration:
 	{
 		$$ = createEntityDeclaration($1);
 	}
+	| preference
+	{
+		$$ = createPreferenceDeclaration($1);
+	}
+;
 
 entity:
 	PROFESSOR IDENTIFIER LBRACE professorAttributeList RBRACE
@@ -249,6 +334,19 @@ classroomAttribute:
 	{
 		$$ = createStringAttribute("has", $2);
 	}
+;
+
+dayOfWeek:
+    MONDAY    { $$ = DAY_MONDAY; }
+  | TUESDAY   { $$ = DAY_TUESDAY; }
+  | WEDNESDAY { $$ = DAY_WEDNESDAY; }
+  | THURSDAY  { $$ = DAY_THURSDAY; }
+  | FRIDAY    { $$ = DAY_FRIDAY; }
+;
+
+dayOfWeekOrEveryday:
+    dayOfWeek { $$ = $1; }
+  | EVERYDAY { $$ = DAY_EVERYDAY; }
 ;
 
 %%

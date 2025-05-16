@@ -13,6 +13,16 @@ typedef struct
 	int minute;
 } Time;
 
+typedef enum
+{
+	DAY_MONDAY,
+	DAY_TUESDAY,
+	DAY_WEDNESDAY,
+	DAY_THURSDAY,
+	DAY_FRIDAY,
+	DAY_EVERYDAY
+} DayOfWeek;
+
 typedef int Token;
 
 #endif

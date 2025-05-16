@@ -25,6 +25,7 @@ extern unsigned int flexCurrentContext(void);
 
 static void _logSyntacticAnalyzerAction(const char *functionName);
 static Entity *_createEntity(EntityType type, char *id, Attribute *attributes);
+static Preference *_createPreference(PreferenceType type);
 
 /**
  * Logs a syntactic-analyzer action in DEBUGGING level.
@@ -80,12 +81,6 @@ Attribute *newAttributeList()
 	return NULL;
 }
 
-Entity *newEntityList()
-{
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	return NULL;
-}
-
 Entity *createCourse(char *id, Attribute *attributes)
 {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -102,22 +97,6 @@ Entity *createClassroom(char *id, Attribute *attributes)
 {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	return _createEntity(ENTITY_CLASSROOM, id, attributes);
-}
-
-Entity *appendEntity(Entity *head, Entity *newEntity)
-{
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	if (head == NULL)
-	{
-		return newEntity;
-	}
-	Entity *current = head;
-	while (current->next != NULL)
-	{
-		current = current->next;
-	}
-	current->next = newEntity;
-	return head;
 }
 
 Configuration createConfiguration(UniversityOpen universityOpen, ClassDuration classDuration)
@@ -190,12 +169,75 @@ Declaration *createEntityDeclaration(Entity *entity)
 	return declaration;
 }
 
+Declaration *createPreferenceDeclaration(Preference *preference)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Declaration *declaration = calloc(1, sizeof(Declaration));
+	declaration->type = DECLARATION_PREFERENCE;
+	declaration->preference = preference;
+	declaration->next = NULL;
+	return declaration;
+}
+
+Preference *createHardPreference()
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Preference *preference = _createPreference(HARD_PREFERENCE);
+	return preference;
+}
+Preference *createSoftPreference()
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Preference *preference = _createPreference(SOFT_PREFERENCE);
+	return preference;
+}
+
+void setPreferenceProfessor(Preference *preference, char *professorId)
+{
+	preference->details->professorId = professorId;
+}
+
+void setPreferenceCourse(Preference *preference, char *courseId)
+{
+	preference->details->courseId = courseId;
+}
+
+void setPreferenceClassroom(Preference *preference, char *classroomId)
+{
+	preference->details->classroomId = classroomId;
+}
+
+void setPreferenceTime(Preference *preference, Time startTime, Time endTime)
+{
+	preference->details->startTime = startTime;
+	preference->details->endTime = endTime;
+	preference->details->hasTime = true;
+}
+
+void setPreferenceDay(Preference *preference, DayOfWeek day)
+{
+	preference->details->day = day;
+	preference->details->hasDay = true;
+}
+
+static Preference *_createPreference(PreferenceType type)
+{
+	Preference *preference = calloc(1, sizeof(Preference));
+	preference->type = type;
+	preference->details = calloc(1, sizeof(PreferenceDetails));
+	preference->details->hasTime = false;
+	preference->details->hasDay = false;
+	preference->details->professorId = NULL;
+	preference->details->courseId = NULL;
+	preference->details->classroomId = NULL;
+	return preference;
+}
+
 static Entity *_createEntity(EntityType type, char *id, Attribute *attributes)
 {
 	Entity *entity = calloc(1, sizeof(Entity));
 	entity->id = id;
 	entity->attributes = attributes;
 	entity->type = type;
-	entity->next = NULL;
 	return entity;
 }

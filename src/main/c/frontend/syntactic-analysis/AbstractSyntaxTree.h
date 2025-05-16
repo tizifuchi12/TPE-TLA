@@ -19,7 +19,14 @@ typedef enum
 
 typedef enum
 {
+	HARD_PREFERENCE,
+	SOFT_PREFERENCE
+} PreferenceType;
+
+typedef enum
+{
 	DECLARATION_ENTITY,
+	DECLARATION_PREFERENCE
 } DeclarationType;
 
 /**
@@ -61,9 +68,26 @@ typedef struct Entity
 {
 	char *id;			   // id de la entidad (nombre del profesor, nombre del curso o nombre del aula)
 	Attribute *attributes; // lista enlazada de atributos
-	struct Entity *next;   // lista general de entidades
 	EntityType type;	   // tipo de entidad (profesor, curso o aula)
 } Entity;
+
+typedef struct PreferenceDetails
+{
+	char *professorId;
+	char *courseId;
+	char *classroomId;
+	Time startTime;
+	Time endTime;
+	DayOfWeek day;
+	boolean hasTime;
+	boolean hasDay;
+} PreferenceDetails;
+
+typedef struct Preference
+{
+	PreferenceDetails *details; // detalles de la preferencia
+	PreferenceType type;		// tipo de preferencia (dura o blanda)
+} Preference;
 
 typedef struct Declaration
 {
@@ -71,6 +95,7 @@ typedef struct Declaration
 	union
 	{
 		Entity *entity;
+		Preference *preference;
 	};
 	struct Declaration *next; // para lista enlazada simple
 } Declaration;
@@ -85,7 +110,6 @@ typedef struct Program
  * Node recursive destructors.
  */
 void releaseAttribute(struct Attribute *attribute);
-void releaseEntity(struct Entity *entity);
 void releaseDeclaration(Declaration *declaration);
 void releaseProgram(Program *program);
 
