@@ -86,8 +86,15 @@
 /** Non-terminals. */
 %type <entityList> entityList
 %type <entity> entity
-%type <attribute> attribute
-%type <attributeList> attributeList
+
+/* Attribute validation */
+%type <attribute> professorAttribute
+%type <attribute> courseAttribute
+%type <attribute> classroomAttribute
+%type <attributeList> professorAttributeList
+%type <attributeList> courseAttributeList
+%type <attributeList> classroomAttributeList
+
 %type <universityOpen> universityOpen
 %type <classDuration> classDuration
 %type <configuration> configuration
@@ -154,22 +161,22 @@ entityList:
 ;
 
 entity:
-	PROFESSOR IDENTIFIER LBRACE attributeList RBRACE
+	PROFESSOR IDENTIFIER LBRACE professorAttributeList RBRACE
 	{
 		$$ = createProfessor($2, $4);
 	}
-	| COURSE IDENTIFIER LBRACE attributeList RBRACE
+	| COURSE IDENTIFIER LBRACE courseAttributeList RBRACE
 	{
 		$$ = createCourse($2, $4);
 	}
-	| CLASSROOM IDENTIFIER LBRACE attributeList RBRACE
+	| CLASSROOM IDENTIFIER LBRACE classroomAttributeList RBRACE
 	{
 		$$ = createClassroom($2, $4);
 	}
 ;
 
-attributeList:
-	attributeList attribute
+professorAttributeList:
+	professorAttributeList professorAttribute
 	{
 		$$ = appendAttribute($1, $2);
 	}
@@ -179,14 +186,50 @@ attributeList:
 	}
 ;
 
-attribute:
-    NAME COLON STRING SEMICOLON
+courseAttributeList:
+	courseAttributeList courseAttribute
+	{
+		$$ = appendAttribute($1, $2);
+	}
+	|
+	{
+		$$ = newAttributeList();
+	}
+;
+
+classroomAttributeList:
+	classroomAttributeList classroomAttribute
+	{
+		$$ = appendAttribute($1, $2);
+	}
+	| 
+	{
+		$$ = newAttributeList();
+	}
+;
+
+professorAttribute:
+	NAME COLON STRING SEMICOLON
+	{
+		$$ = createStringAttribute("name", $3);
+	}
+;
+
+courseAttribute:
+	NAME COLON STRING SEMICOLON
+	{
+		$$ = createStringAttribute("name", $3);
+	}
+	| HOURS COLON INTEGER SEMICOLON
+	{
+		$$ = createIntAttribute("hours", $3);
+	}
+;
+
+classroomAttribute:
+	NAME COLON STRING SEMICOLON
     {
         $$ = createStringAttribute("name", $3);
-    }
-  	| HOURS COLON INTEGER SEMICOLON
-    {
-        $$ = createIntAttribute("hours", $3);
     }
 	| BUILDING COLON STRING SEMICOLON
 	{
