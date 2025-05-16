@@ -77,9 +77,6 @@
 %token <token> RBRACE
 %token <token> COLON
 %token <token> SEMICOLON
-%token <token> COMMA
-%token <token> LBRACKET
-%token <token> RBRACKET
 
 %token <token> UNKNOWN
 
