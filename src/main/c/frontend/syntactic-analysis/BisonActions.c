@@ -139,12 +139,12 @@ Configuration createConfigurationWithoutClassDuration(UniversityOpen universityO
 	return configuration;
 }
 
-Program *newProgram(CompilerState *compilerState, Configuration configuration, Entity *entities)
+Program *newProgram(CompilerState *compilerState, Configuration configuration, Declaration *declarations)
 {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program *program = calloc(1, sizeof(Program));
 	program->configuration = configuration;
-	program->entities = entities;
+	program->declarations = declarations;
 	compilerState->abstractSyntaxtTree = program;
 	if (0 < flexCurrentContext())
 	{
@@ -156,6 +156,38 @@ Program *newProgram(CompilerState *compilerState, Configuration configuration, E
 		compilerState->succeed = true;
 	}
 	return program;
+}
+
+Declaration *newDeclarationList()
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return NULL;
+}
+
+Declaration *appendDeclaration(Declaration *head, Declaration *newDeclaration)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	if (head == NULL)
+	{
+		return newDeclaration;
+	}
+	Declaration *current = head;
+	while (current->next != NULL)
+	{
+		current = current->next;
+	}
+	current->next = newDeclaration;
+	return head;
+}
+
+Declaration *createEntityDeclaration(Entity *entity)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Declaration *declaration = calloc(1, sizeof(Declaration));
+	declaration->type = DECLARATION_ENTITY;
+	declaration->entity = entity;
+	declaration->next = NULL;
+	return declaration;
 }
 
 static Entity *_createEntity(EntityType type, char *id, Attribute *attributes)

@@ -18,8 +18,10 @@
 	/** Non-terminals. */
 
 	Program * program; // general program
+	Declaration * declarationList; // general declaration
+	Declaration * declaration; // general declaration
 	Entity * entityList; // list of entities (professors and courses)
-	Entity * entity; // professor or course
+	Entity * entity; // professor, course or classroom
 	Attribute * attribute; // attribute for course or professor (hours, name, available, etc)
 	Attribute * attributeList; // list of attributes for course or professor
 
@@ -81,7 +83,9 @@
 %token <token> UNKNOWN
 
 /** Non-terminals. */
-%type <entityList> entityList
+%type <declarationList> declarationList
+%type <declaration> declaration
+
 %type <entity> entity
 
 /* Attribute validation */
@@ -108,7 +112,7 @@
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 
 program:
-	configuration entityList
+	configuration declarationList
 	{
 		// The program is a list of entities (professors and courses).
 		$$ = newProgram(currentCompilerState(), $1, $2);
@@ -146,16 +150,22 @@ classDuration:
 	}
 ;
 
-entityList:
-	entityList entity
+declarationList:
+	declarationList declaration
 	{
-		$$ = appendEntity($1, $2);
+		$$ = appendDeclaration($1, $2);
 	}
-	| /* empty */
+	| 
 	{
-		$$ = newEntityList();
+		$$ = newDeclarationList();
 	}
 ;
+
+declaration:
+	entity
+	{
+		$$ = createEntityDeclaration($1);
+	}
 
 entity:
 	PROFESSOR IDENTIFIER LBRACE professorAttributeList RBRACE

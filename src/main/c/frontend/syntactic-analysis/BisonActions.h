@@ -18,7 +18,11 @@ void shutdownBisonActionsModule();
  * Bison semantic actions.
  */
 
-Program *newProgram(CompilerState *compilerState, Configuration configuration, Entity *entities);
+Program *newProgram(CompilerState *compilerState, Configuration configuration, Declaration *declarations);
+
+Declaration *newDeclarationList();
+Declaration *appendDeclaration(Declaration *head, Declaration *newDeclaration);
+Declaration *createEntityDeclaration(Entity *entity);
 
 Entity *newEntityList();
 Entity *appendEntity(Entity *head, Entity *newEntity);

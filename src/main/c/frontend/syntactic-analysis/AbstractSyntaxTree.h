@@ -17,6 +17,11 @@ typedef enum
 	ENTITY_CLASSROOM
 } EntityType;
 
+typedef enum
+{
+	DECLARATION_ENTITY,
+} DeclarationType;
+
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -60,10 +65,20 @@ typedef struct Entity
 	EntityType type;	   // tipo de entidad (profesor, curso o aula)
 } Entity;
 
+typedef struct Declaration
+{
+	DeclarationType type;
+	union
+	{
+		Entity *entity;
+	};
+	struct Declaration *next; // para lista enlazada simple
+} Declaration;
+
 typedef struct Program
 {
 	Configuration configuration; // configuracion de la universidad
-	Entity *entities;			 // lista enlazada de entidades
+	Declaration *declarations;	 // lista enlazada de declaraciones
 } Program;
 
 /**
@@ -71,6 +86,7 @@ typedef struct Program
  */
 void releaseAttribute(struct Attribute *attribute);
 void releaseEntity(struct Entity *entity);
+void releaseDeclaration(Declaration *declaration);
 void releaseProgram(Program *program);
 
 #endif

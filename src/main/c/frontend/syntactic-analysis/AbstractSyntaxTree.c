@@ -46,7 +46,25 @@ void releaseProgram(Program *program)
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (program != NULL)
 	{
-		releaseEntity(program->entities);
+		releaseDeclaration(program->declarations);
 		free(program);
 	}
+}
+
+void releaseDeclaration(Declaration *declaration)
+{
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (!declaration)
+		return;
+	if (declaration->next)
+		releaseDeclaration(declaration->next);
+	switch (declaration->type)
+	{
+	case DECLARATION_ENTITY:
+		releaseEntity(declaration->entity);
+		break;
+	default:
+		break;
+	}
+	free(declaration);
 }
