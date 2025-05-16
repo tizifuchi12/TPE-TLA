@@ -92,6 +92,8 @@
 %type <attribute> professorAttribute
 %type <attribute> courseAttribute
 %type <attribute> classroomAttribute
+%type <attribute> nameAttribute
+
 %type <attributeList> professorAttributeList
 %type <attributeList> courseAttributeList
 %type <attributeList> classroomAttributeList
@@ -215,18 +217,18 @@ classroomAttributeList:
 	}
 ;
 
-professorAttribute:
+nameAttribute:
 	NAME COLON STRING SEMICOLON
 	{
 		$$ = createStringAttribute("name", $3);
 	}
+
+professorAttribute:
+	nameAttribute
 ;
 
 courseAttribute:
-	NAME COLON STRING SEMICOLON
-	{
-		$$ = createStringAttribute("name", $3);
-	}
+	nameAttribute
 	| HOURS COLON INTEGER SEMICOLON
 	{
 		$$ = createIntAttribute("hours", $3);
@@ -234,10 +236,7 @@ courseAttribute:
 ;
 
 classroomAttribute:
-	NAME COLON STRING SEMICOLON
-    {
-        $$ = createStringAttribute("name", $3);
-    }
+	nameAttribute
 	| BUILDING COLON STRING SEMICOLON
 	{
 		$$ = createStringAttribute("building", $3);
