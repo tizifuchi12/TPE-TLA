@@ -75,8 +75,6 @@ DURATION_HOURS   {INT}h
 "}"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), RBRACE); }
 ":"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), COLON); }
 ";"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), SEMICOLON); }
-"["                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), LBRACKET); }
-"]"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), RBRACKET); }
 
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
