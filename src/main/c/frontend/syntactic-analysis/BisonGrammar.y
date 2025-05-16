@@ -100,6 +100,8 @@
 %token <token> REQUIRE
 
 %token <token> AVAILABLE
+%token <token> CAN
+%token <token> REQUIRES
 
 %token <token> UNKNOWN
 
@@ -335,6 +337,11 @@ professorAttribute:
 	{
 		$$ = createIntervalAttribute("available", $2);
 	}
+	|
+	CAN TEACH IDENTIFIER SEMICOLON
+	{
+		$$ = createStringAttribute("canTeach", $3);
+	}
 ;
 
 courseAttribute:
@@ -342,6 +349,10 @@ courseAttribute:
 	| HOURS COLON INTEGER SEMICOLON
 	{
 		$$ = createIntAttribute("hours", $3);
+	}
+	| REQUIRES STRING SEMICOLON
+	{
+		$$ = createStringAttribute("requires", $2);
 	}
 ;
 
