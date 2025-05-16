@@ -13,7 +13,8 @@ void shutdownAbstractSyntaxTreeModule();
 typedef enum
 {
 	ENTITY_PROFESSOR,
-	ENTITY_COURSE
+	ENTITY_COURSE,
+	ENTITY_CLASSROOM
 } EntityType;
 
 /**
@@ -31,20 +32,6 @@ typedef struct Attribute
 	int isInt;				// flag para saber qué tipo tiene
 	struct Attribute *next; // para lista enlazada simple
 } Attribute;
-
-typedef struct Professor
-{
-	char *id;
-	Attribute *attributes;
-	struct Professor *next; // para lista de profesores
-} Professor;
-
-typedef struct Course
-{
-	char *id;
-	Attribute *attributes;
-	struct Course *next; // para lista de cursos
-} Course;
 
 typedef struct
 {
@@ -67,13 +54,10 @@ typedef struct
 
 typedef struct Entity
 {
-	union
-	{
-		Professor *professor;
-		Course *course;
-	};
-	struct Entity *next; // lista general de entidades
-	EntityType type;	 // tipo de entidad (profesor o curso)
+	char *id;			   // id de la entidad (nombre del profesor, nombre del curso o nombre del aula)
+	Attribute *attributes; // lista enlazada de atributos
+	struct Entity *next;   // lista general de entidades
+	EntityType type;	   // tipo de entidad (profesor, curso o aula)
 } Entity;
 
 typedef struct Program
@@ -86,8 +70,6 @@ typedef struct Program
  * Node recursive destructors.
  */
 void releaseAttribute(struct Attribute *attribute);
-void releaseProfessor(struct Professor *professor);
-void releaseCourse(struct Course *course);
 void releaseEntity(struct Entity *entity);
 void releaseProgram(Program *program);
 

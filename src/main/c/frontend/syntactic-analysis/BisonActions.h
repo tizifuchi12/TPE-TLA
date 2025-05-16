@@ -22,8 +22,10 @@ Program *newProgram(CompilerState *compilerState, Configuration configuration, E
 
 Entity *newEntityList();
 Entity *appendEntity(Entity *head, Entity *newEntity);
+
 Entity *createProfessor(char *id, Attribute *attributes);
 Entity *createCourse(char *id, Attribute *attributes);
+Entity *createClassroom(char *id, Attribute *attributes);
 
 Attribute *newAttributeList();
 Attribute *appendAttribute(Attribute *head, Attribute *newAttribute);

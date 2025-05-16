@@ -20,8 +20,6 @@
 	Program * program; // general program
 	Entity * entityList; // list of entities (professors and courses)
 	Entity * entity; // professor or course
-	Course * course; // course
-	Professor * professor; // professor
 	Attribute * attribute; // attribute for course or professor (hours, name, available, etc)
 	Attribute * attributeList; // list of attributes for course or professor
 
@@ -63,6 +61,11 @@
 %token <token> BETWEEN
 %token <token> AND
 
+%token <token> CLASSROOM
+%token <token> BUILDING
+%token <token> CAPACITY
+%token <token> HAS
+
 %token <integer> INTEGER
 %token <string> STRING
 %token <string> IDENTIFIER
@@ -74,6 +77,9 @@
 %token <token> RBRACE
 %token <token> COLON
 %token <token> SEMICOLON
+%token <token> COMMA
+%token <token> LBRACKET
+%token <token> RBRACKET
 
 %token <token> UNKNOWN
 
@@ -139,14 +145,10 @@ classDuration:
 entityList:
 	entityList entity
 	{
-		// The entity list is a list of entities (professors and courses).
-		fprintf(stderr, "newEntityList\n");
 		$$ = appendEntity($1, $2);
 	}
 	| /* empty */
 	{
-		// The entity list is empty.
-		fprintf(stderr, "newEntityList\n");
 		$$ = newEntityList();
 	}
 ;
@@ -154,13 +156,15 @@ entityList:
 entity:
 	PROFESSOR IDENTIFIER LBRACE attributeList RBRACE
 	{
-		// The entity is a professor.
 		$$ = createProfessor($2, $4);
 	}
 	| COURSE IDENTIFIER LBRACE attributeList RBRACE
 	{
-		// The entity is a course.
 		$$ = createCourse($2, $4);
+	}
+	| CLASSROOM IDENTIFIER LBRACE attributeList RBRACE
+	{
+		$$ = createClassroom($2, $4);
 	}
 ;
 
@@ -169,9 +173,8 @@ attributeList:
 	{
 		$$ = appendAttribute($1, $2);
 	}
-	| /* empty */
+	| 
 	{
-		// The attribute list is empty.
 		$$ = newAttributeList();
 	}
 ;
@@ -181,10 +184,22 @@ attribute:
     {
         $$ = createStringAttribute("name", $3);
     }
-  | HOURS COLON INTEGER SEMICOLON
+  	| HOURS COLON INTEGER SEMICOLON
     {
         $$ = createIntAttribute("hours", $3);
     }
+	| BUILDING COLON STRING SEMICOLON
+	{
+		$$ = createStringAttribute("building", $3);
+	}
+	| CAPACITY COLON INTEGER SEMICOLON
+	{
+		$$ = createIntAttribute("capacity", $3);
+	}
+	| HAS STRING SEMICOLON
+	{
+		$$ = createStringAttribute("has", $2);
+	}
 ;
 
 %%

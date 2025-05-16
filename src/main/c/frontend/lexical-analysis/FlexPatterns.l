@@ -59,6 +59,11 @@ DURATION_HOURS   {INT}h
 "between"                       { return KeywordLexemeAction(createLexicalAnalyzerContext(), BETWEEN); }
 "and"                           { return KeywordLexemeAction(createLexicalAnalyzerContext(), AND); }
 
+"classroom"                     { return KeywordLexemeAction(createLexicalAnalyzerContext(), CLASSROOM); }
+"building"                      { return KeywordLexemeAction(createLexicalAnalyzerContext(), BUILDING); }
+"capacity"                      { return KeywordLexemeAction(createLexicalAnalyzerContext(), CAPACITY); }
+"has"                           { return KeywordLexemeAction(createLexicalAnalyzerContext(), HAS); }
+
 {ID}                            { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 {STRING}                        { return StringLexemeAction(createLexicalAnalyzerContext()); }  
 {INT}                           { return IntegerLexemeAction(createLexicalAnalyzerContext()); }
@@ -70,6 +75,8 @@ DURATION_HOURS   {INT}h
 "}"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), RBRACE); }
 ":"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), COLON); }
 ";"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), SEMICOLON); }
+"["                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), LBRACKET); }
+"]"                             { return SymbolLexemeAction(createLexicalAnalyzerContext(), RBRACKET); }
 
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }

@@ -24,6 +24,7 @@ extern unsigned int flexCurrentContext(void);
 /* PRIVATE FUNCTIONS */
 
 static void _logSyntacticAnalyzerAction(const char *functionName);
+static Entity *_createEntity(EntityType type, char *id, Attribute *attributes);
 
 /**
  * Logs a syntactic-analyzer action in DEBUGGING level.
@@ -88,29 +89,19 @@ Entity *newEntityList()
 Entity *createCourse(char *id, Attribute *attributes)
 {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Course *course = calloc(1, sizeof(Course));
-	course->id = id;
-	course->attributes = attributes;
-
-	Entity *entity = calloc(1, sizeof(Entity));
-	entity->course = course;
-	entity->type = ENTITY_COURSE;
-	entity->next = NULL;
-	return entity;
+	return _createEntity(ENTITY_COURSE, id, attributes);
 }
 
 Entity *createProfessor(char *id, Attribute *attributes)
 {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Professor *professor = calloc(1, sizeof(Professor));
-	professor->id = id;
-	professor->attributes = attributes;
+	return _createEntity(ENTITY_PROFESSOR, id, attributes);
+}
 
-	Entity *entity = calloc(1, sizeof(Entity));
-	entity->professor = professor;
-	entity->type = ENTITY_PROFESSOR;
-	entity->next = NULL;
-	return entity;
+Entity *createClassroom(char *id, Attribute *attributes)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return _createEntity(ENTITY_CLASSROOM, id, attributes);
 }
 
 Entity *appendEntity(Entity *head, Entity *newEntity)
@@ -165,4 +156,14 @@ Program *newProgram(CompilerState *compilerState, Configuration configuration, E
 		compilerState->succeed = true;
 	}
 	return program;
+}
+
+static Entity *_createEntity(EntityType type, char *id, Attribute *attributes)
+{
+	Entity *entity = calloc(1, sizeof(Entity));
+	entity->id = id;
+	entity->attributes = attributes;
+	entity->type = type;
+	entity->next = NULL;
+	return entity;
 }
