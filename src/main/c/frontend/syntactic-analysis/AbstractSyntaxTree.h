@@ -26,7 +26,8 @@ typedef enum
 typedef enum
 {
 	DECLARATION_ENTITY,
-	DECLARATION_PREFERENCE
+	DECLARATION_PREFERENCE,
+	DECLARATION_DEMAND
 } DeclarationType;
 
 /**
@@ -45,13 +46,13 @@ typedef struct Attribute
 	struct Attribute *next; // para lista enlazada simple
 } Attribute;
 
-typedef struct
+typedef struct UniversityOpen
 {
 	Time openFrom;
 	Time openTo;
 } UniversityOpen;
 
-typedef struct
+typedef struct ClassDuration
 {
 	int minHours;
 	int maxHours;
@@ -89,6 +90,12 @@ typedef struct Preference
 	PreferenceType type;		// tipo de preferencia (dura o blanda)
 } Preference;
 
+typedef struct Demand
+{
+	char *courseId;
+	int students;
+} Demand;
+
 typedef struct Declaration
 {
 	DeclarationType type;
@@ -96,6 +103,7 @@ typedef struct Declaration
 	{
 		Entity *entity;
 		Preference *preference;
+		Demand *demand;
 	};
 	struct Declaration *next; // para lista enlazada simple
 } Declaration;
@@ -109,7 +117,9 @@ typedef struct Program
 /**
  * Node recursive destructors.
  */
-void releaseAttribute(struct Attribute *attribute);
+void releaseAttribute(Attribute *attribute);
+void releasePreference(Preference *preference);
+void releaseEntity(Entity *entity);
 void releaseDeclaration(Declaration *declaration);
 void releaseProgram(Program *program);
 

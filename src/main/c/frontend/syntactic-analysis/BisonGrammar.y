@@ -21,6 +21,7 @@
 	Program * program; // general program
 	Declaration * declarationList; // general declaration
 	Declaration * declaration; // general declaration
+	Demand * demand; // general demand
 	Preference * preference; // general preference
 	Entity * entity; // professor, course or classroom
 	Attribute * attribute; // attribute for course or professor (hours, name, available, etc)
@@ -94,6 +95,9 @@
 %token <token> COLON
 %token <token> SEMICOLON
 
+%token <token> STUDENTS
+%token <token> REQUIRE
+
 %token <token> UNKNOWN
 
 /** Non-terminals. */
@@ -106,6 +110,7 @@
 %type <entity> entity
 
 %type <preference> preference
+%type <demand> demand
 
 /* Attribute validation */
 %type <attribute> professorAttribute
@@ -152,6 +157,28 @@ configuration:
 	| classDuration universityOpen
 	{
 		$$ = createConfiguration($2, $1);
+	}
+;
+
+declaration:
+	entity
+	{
+		$$ = createEntityDeclaration($1);
+	}
+	| preference
+	{
+		$$ = createPreferenceDeclaration($1);
+	}
+	| demand
+	{
+		$$ = createDemandDeclaration($1);
+	}
+;
+
+demand: 
+    INTEGER STUDENTS REQUIRE IDENTIFIER SEMICOLON
+	{
+		$$ = createDemand($4, $1);
 	}
 ;
 
@@ -240,17 +267,6 @@ declarationList:
 	| 
 	{
 		$$ = newDeclarationList();
-	}
-;
-
-declaration:
-	entity
-	{
-		$$ = createEntityDeclaration($1);
-	}
-	| preference
-	{
-		$$ = createPreferenceDeclaration($1);
 	}
 ;
 

@@ -50,6 +50,13 @@ void releasePreference(Preference *preference)
 	free(preference);
 }
 
+void releaseDemand(Demand *demand)
+{
+	if (!demand)
+		return;
+	free(demand);
+}
+
 void releaseProgram(Program *program)
 {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
@@ -74,6 +81,9 @@ void releaseDeclaration(Declaration *declaration)
 		break;
 	case DECLARATION_PREFERENCE:
 		releasePreference(declaration->preference);
+		break;
+	case DECLARATION_DEMAND:
+		releaseDemand(declaration->demand);
 		break;
 	default:
 		break;

@@ -24,6 +24,9 @@ Declaration *newDeclarationList();
 Declaration *appendDeclaration(Declaration *head, Declaration *newDeclaration);
 Declaration *createEntityDeclaration(Entity *entity);
 Declaration *createPreferenceDeclaration(Preference *preference);
+Declaration *createDemandDeclaration(Demand *demand);
+
+Demand *createDemand(char *courseId, int students);
 
 Preference *createHardPreference();
 Preference *createSoftPreference();

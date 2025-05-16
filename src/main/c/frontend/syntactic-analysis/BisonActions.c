@@ -220,6 +220,25 @@ void setPreferenceDay(Preference *preference, DayOfWeek day)
 	preference->details->hasDay = true;
 }
 
+Declaration *createDemandDeclaration(Demand *demand)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Declaration *declaration = calloc(1, sizeof(Declaration));
+	declaration->type = DECLARATION_DEMAND;
+	declaration->demand = demand;
+	declaration->next = NULL;
+	return declaration;
+}
+
+Demand *createDemand(char *courseId, int students)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Demand *demand = calloc(1, sizeof(Demand));
+	demand->courseId = courseId;
+	demand->students = students;
+	return demand;
+}
+
 static Preference *_createPreference(PreferenceType type)
 {
 	Preference *preference = calloc(1, sizeof(Preference));
