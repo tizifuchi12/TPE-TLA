@@ -1,0 +1,7 @@
+university open from 08:00 to 22:00;
+class duration between 1h and 3h;
+
+professor juan {
+	name: "Juan Perez";
+	capacity: 40;
+}

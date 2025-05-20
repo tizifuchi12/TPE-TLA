@@ -1,0 +1,7 @@
+university open from 8:00 to 22:00;
+
+professor prof2 {
+    name: "Ana Gómez";
+    available from 08:00 to 18:00 on MONDAY;
+    available from 14:00 to 16:00 on THURSDAY;
+}

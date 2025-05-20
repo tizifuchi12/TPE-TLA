@@ -10,68 +10,125 @@ void initializeAbstractSyntaxTreeModule();
 /** Shutdown module's internal state. */
 void shutdownAbstractSyntaxTreeModule();
 
-/**
- * This typedefs allows self-referencing types.
- */
+typedef enum
+{
+	ENTITY_PROFESSOR,
+	ENTITY_COURSE,
+	ENTITY_CLASSROOM
+} EntityType;
 
-typedef enum ExpressionType ExpressionType;
-typedef enum FactorType FactorType;
+typedef enum
+{
+	HARD_PREFERENCE,
+	SOFT_PREFERENCE
+} PreferenceType;
 
-typedef struct Constant Constant;
-typedef struct Expression Expression;
-typedef struct Factor Factor;
-typedef struct Program Program;
+typedef enum
+{
+	ATTR_INTERVAL,
+	ATTR_STRING,
+	ATTR_INT
+} AttributeType;
+
+typedef enum
+{
+	DECLARATION_ENTITY,
+	DECLARATION_PREFERENCE,
+	DECLARATION_DEMAND
+} DeclarationType;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
 
-enum ExpressionType {
-	ADDITION,
-	DIVISION,
-	FACTOR,
-	MULTIPLICATION,
-	SUBTRACTION
-};
-
-enum FactorType {
-	CONSTANT,
-	EXPRESSION
-};
-
-struct Constant {
-	int value;
-};
-
-struct Factor {
-	union {
-		Constant * constant;
-		Expression * expression;
+typedef struct Attribute
+{
+	char *key; // "name", "hours", "available"
+	union
+	{
+		char *strValue;
+		int intValue;
+		IntervalDayOfWeek intervalValue;
 	};
-	FactorType type;
-};
+	AttributeType attributeType;
+	struct Attribute *next; // para lista enlazada simple
+} Attribute;
 
-struct Expression {
-	union {
-		Factor * factor;
-		struct {
-			Expression * leftExpression;
-			Expression * rightExpression;
-		};
+typedef struct UniversityOpen
+{
+	Time openFrom;
+	Time openTo;
+} UniversityOpen;
+
+typedef struct ClassDuration
+{
+	int minHours;
+	int maxHours;
+} ClassDuration;
+
+typedef struct
+{
+	UniversityOpen universityOpen;
+	ClassDuration classDuration;
+	boolean hasClassDuration;
+} Configuration;
+
+typedef struct Entity
+{
+	char *id;			   // id de la entidad (nombre del profesor, nombre del curso o nombre del aula)
+	Attribute *attributes; // lista enlazada de atributos
+	EntityType type;	   // tipo de entidad (profesor, curso o aula)
+} Entity;
+
+typedef struct PreferenceDetails
+{
+	char *professorId;
+	char *courseId;
+	char *classroomId;
+	Time startTime;
+	Time endTime;
+	DayOfWeek day;
+	boolean hasTime;
+	boolean hasDay;
+} PreferenceDetails;
+
+typedef struct Preference
+{
+	PreferenceDetails *details; // detalles de la preferencia
+	PreferenceType type;		// tipo de preferencia (dura o blanda)
+} Preference;
+
+typedef struct Demand
+{
+	char *courseId;
+	int students;
+} Demand;
+
+typedef struct Declaration
+{
+	DeclarationType type;
+	union
+	{
+		Entity *entity;
+		Preference *preference;
+		Demand *demand;
 	};
-	ExpressionType type;
-};
+	struct Declaration *next; // para lista enlazada simple
+} Declaration;
 
-struct Program {
-	Expression * expression;
-};
+typedef struct Program
+{
+	Configuration configuration; // configuracion de la universidad
+	Declaration *declarations;	 // lista enlazada de declaraciones
+} Program;
 
 /**
  * Node recursive destructors.
  */
-void releaseConstant(Constant * constant);
-void releaseExpression(Expression * expression);
-void releaseFactor(Factor * factor);
-void releaseProgram(Program * program);
+void releaseAttribute(Attribute *attribute);
+void releasePreference(Preference *preference);
+void releaseEntity(Entity *entity);
+void releaseDeclaration(Declaration *declaration);
+void releaseProgram(Program *program);
 
 #endif

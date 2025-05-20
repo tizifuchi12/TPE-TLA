@@ -2,65 +2,91 @@
 
 /* MODULE INTERNAL STATE */
 
-static Logger * _logger = NULL;
+static Logger *_logger = NULL;
 
-void initializeAbstractSyntaxTreeModule() {
+void initializeAbstractSyntaxTreeModule()
+{
 	_logger = createLogger("AbstractSyntxTree");
 }
 
-void shutdownAbstractSyntaxTreeModule() {
-	if (_logger != NULL) {
+void shutdownAbstractSyntaxTreeModule()
+{
+	if (_logger != NULL)
+	{
 		destroyLogger(_logger);
 	}
 }
 
 /** PUBLIC FUNCTIONS */
 
-void releaseConstant(Constant * constant) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (constant != NULL) {
-		free(constant);
-	}
+void releaseAttribute(Attribute *attribute)
+{
+	if (!attribute)
+		return;
+	if (attribute->next)
+		releaseAttribute(attribute->next);
+
+	free(attribute);
 }
 
-void releaseExpression(Expression * expression) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (expression != NULL) {
-		switch (expression->type) {
-			case ADDITION:
-			case DIVISION:
-			case MULTIPLICATION:
-			case SUBTRACTION:
-				releaseExpression(expression->leftExpression);
-				releaseExpression(expression->rightExpression);
-				break;
-			case FACTOR:
-				releaseFactor(expression->factor);
-				break;
-		}
-		free(expression);
-	}
+void releaseEntity(Entity *entity)
+{
+	if (!entity)
+		return;
+	if (entity->attributes)
+		releaseAttribute(entity->attributes);
+
+	free(entity);
 }
 
-void releaseFactor(Factor * factor) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (factor != NULL) {
-		switch (factor->type) {
-			case CONSTANT:
-				releaseConstant(factor->constant);
-				break;
-			case EXPRESSION:
-				releaseExpression(factor->expression);
-				break;
-		}
-		free(factor);
+void releasePreference(Preference *preference)
+{
+	if (!preference)
+		return;
+	if (preference->details)
+	{
+		free(preference->details);
 	}
+	free(preference);
 }
 
-void releaseProgram(Program * program) {
+void releaseDemand(Demand *demand)
+{
+	if (!demand)
+		return;
+	free(demand);
+}
+
+void releaseProgram(Program *program)
+{
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (program != NULL) {
-		releaseExpression(program->expression);
+	if (program != NULL)
+	{
+		releaseDeclaration(program->declarations);
 		free(program);
 	}
+}
+
+void releaseDeclaration(Declaration *declaration)
+{
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (!declaration)
+		return;
+	if (declaration->next)
+		releaseDeclaration(declaration->next);
+	switch (declaration->type)
+	{
+	case DECLARATION_ENTITY:
+		releaseEntity(declaration->entity);
+		break;
+	case DECLARATION_PREFERENCE:
+		releasePreference(declaration->preference);
+		break;
+	case DECLARATION_DEMAND:
+		releaseDemand(declaration->demand);
+		break;
+	default:
+		break;
+	}
+	free(declaration);
 }

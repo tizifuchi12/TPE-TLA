@@ -18,11 +18,36 @@ void shutdownBisonActionsModule();
  * Bison semantic actions.
  */
 
-Constant * IntegerConstantSemanticAction(const int value);
-Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
-Expression * FactorExpressionSemanticAction(Factor * factor);
-Factor * ConstantFactorSemanticAction(Constant * constant);
-Factor * ExpressionFactorSemanticAction(Expression * expression);
-Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
+Program *newProgram(CompilerState *compilerState, Configuration configuration, Declaration *declarations);
+
+Declaration *newDeclarationList();
+Declaration *appendDeclaration(Declaration *head, Declaration *newDeclaration);
+Declaration *createEntityDeclaration(Entity *entity);
+Declaration *createPreferenceDeclaration(Preference *preference);
+Declaration *createDemandDeclaration(Demand *demand);
+
+Demand *createDemand(char *courseId, int students);
+
+Preference *createHardPreference();
+Preference *createSoftPreference();
+
+void setPreferenceProfessor(Preference *preference, char *professorId);
+void setPreferenceCourse(Preference *preference, char *courseId);
+void setPreferenceClassroom(Preference *preference, char *classroomId);
+void setPreferenceTime(Preference *preference, Time startTime, Time endTime);
+void setPreferenceDay(Preference *preference, DayOfWeek days);
+
+Entity *createProfessor(char *id, Attribute *attributes);
+Entity *createCourse(char *id, Attribute *attributes);
+Entity *createClassroom(char *id, Attribute *attributes);
+
+Attribute *newAttributeList();
+Attribute *appendAttribute(Attribute *head, Attribute *newAttribute);
+Attribute *createIntAttribute(char *key, int value);
+Attribute *createStringAttribute(char *key, char *value);
+Attribute *createIntervalAttribute(char *key, IntervalDayOfWeek interval);
+
+Configuration createConfiguration(UniversityOpen universityOpen, ClassDuration classDuration);
+Configuration createConfigurationWithoutClassDuration(UniversityOpen universityOpen);
 
 #endif
