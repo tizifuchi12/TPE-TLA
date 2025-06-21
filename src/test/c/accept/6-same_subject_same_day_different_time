@@ -1,0 +1,23 @@
+university open from 08:00 to 22:00;
+class duration between 1h and 4h;
+
+classroom _101 { name: "Aula 101"; building: "SDF"; capacity: 40; has "projector"; }
+classroom _102 { name: "Aula 102"; building: "SDF"; capacity: 40; has "projector"; }
+
+course ATLyC {
+    name: "Autómatas, Teoría de Lenguajes y Compiladores";
+    hours: 6;
+    requires "projector";
+}
+
+professor Agustin {
+    name: "M. Agustin Golmar";
+    available from 10:00 to 15:00 on MONDAY;
+    available from 17:00 to 21:00 on MONDAY;
+    can teach ATLyC;
+}
+
+Agustin teaches ATLyC from 11:00 to 14:00 on MONDAY in _101;
+Agustin teaches ATLyC from 17:00 to 19:00 on MONDAY in _102;
+
+40 students require ATLyC;

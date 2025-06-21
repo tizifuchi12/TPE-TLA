@@ -1,0 +1,18 @@
+university open from 08:00 to 22:00;
+class duration between 2h and 4h;
+
+classroom _202 { name: "Aula 202"; building: "SDF"; capacity: 30; has "projector"; }
+
+course Algoritmos {
+    name: "Algoritmos";
+    hours: 6;
+    requires "lab";
+}
+
+professor Juan {
+    name: "Juan";
+    available from 14:00 to 18:00 on TUESDAY;
+    can teach Algoritmos;
+}
+
+Juan teaches Algoritmos from 14:00 to 16:00 on TUESDAY in _202;

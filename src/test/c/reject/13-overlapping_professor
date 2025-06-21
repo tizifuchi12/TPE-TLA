@@ -1,0 +1,26 @@
+university open from 08:00 to 22:00;
+class duration between 2h and 4h;
+
+classroom _A { name: "Aula A"; building: "SDF"; capacity: 40; has "projector"; }
+
+course ATLyC {
+    name: "Autómatas";
+    hours: 6;
+    requires "projector";
+}
+
+course Algoritmos {
+    name: "Algoritmos";
+    hours: 6;
+    requires "projector";
+}
+
+professor Laura {
+    name: "Laura";
+    available from 10:00 to 18:00 EVERYDAY;
+    can teach ATLyC;
+    can teach Algoritmos;
+}
+
+Laura teaches ATLyC from 12:00 to 14:00 on TUESDAY in _A;
+Laura teaches Algoritmos from 12:00 to 14:00 on TUESDAY in _A;

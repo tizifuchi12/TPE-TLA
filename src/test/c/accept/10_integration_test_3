@@ -1,0 +1,48 @@
+// Configuración global
+university open from 08:00 to 22:00;
+class duration between 2h and 4h;
+
+// Aulas
+classroom _302 { name: "Aula 302"; building: "SDT"; capacity: 60; has "lab"; has "projector"; }
+classroom _203 { name: "Aula 203"; building: "SDT"; capacity: 50; has "projector"; }
+
+// Cursos
+course SO {
+    name: "Sistemas Operativos";
+    hours: 6;
+    requires "projector";
+}
+
+course Algoritmos {
+    name: "Algoritmos y Estructuras de Datos";
+    hours: 8;
+    requires "lab";
+}
+
+// Profesores
+professor Agustin {
+    name: "M. Agustin Golmar";
+    available from 12:00 to 18:00 on TUESDAY;
+    can teach SO;
+    can teach Algoritmos;
+}
+
+professor Nicolas {
+    name: "Nicolas Dominguez";
+    available from 10:00 to 16:00 on WEDNESDAY;
+    can teach Algoritmos;
+}
+professor Leticia {
+    name: "Leticia";
+    available from 13:00 to 18:00 on MONDAY;
+    can teach Algoritmos;
+}
+
+// Asignaciones
+Agustin teaches SO from 12:00 to 15:00 on TUESDAY in _203;
+Nicolas teaches Algoritmos from 10:00 to 13:00 on WEDNESDAY in _302;
+
+// Demandas
+42 students require SO;
+60 students require Algoritmos;
+

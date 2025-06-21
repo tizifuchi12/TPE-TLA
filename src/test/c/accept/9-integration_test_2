@@ -1,0 +1,81 @@
+// Configuración global
+university open from 08:00 to 22:00;
+class duration between 2h and 4h;
+
+// Aulas
+classroom _201 { name: "Aula 201"; building: "Edificio A"; capacity: 60; has "projector"; }
+classroom _202 { name: "Aula 202"; building: "Edificio A"; capacity: 60; has "projector"; }
+classroom _301 { name: "Aula 301"; building: "Edificio B"; capacity: 60; has "lab"; has "projector"; }
+classroom _302 { name: "Aula 302"; building: "Edificio B"; capacity: 60; has "projector"; }
+
+// Cursos
+course ATLyC {
+    name: "Autómatas, Teoría de Lenguajes y Compiladores";
+    hours: 6;
+    requires "projector";
+}
+
+course Algoritmos {
+    name: "Algoritmos y Estructuras de Datos";
+    hours: 8;
+    requires "lab";
+}
+
+course BaseDeDatos {
+    name: "Bases de Datos";
+    hours: 4;
+    requires "projector";
+}
+
+course Redes {
+    name: "Redes de Computadoras";
+    hours: 4;
+    requires "lab";
+}
+
+course SO {
+    name: "Sistemas Operativos";
+    hours: 6;
+    requires "projector";
+}
+
+// Profesores
+professor Ana {
+    name: "Ana Arias";
+    available from 10:00 to 18:00 on MONDAY;
+    available from 10:00 to 18:00 on WEDNESDAY;
+    can teach ATLyC;
+    can teach SO;
+}
+
+professor Agustin {
+    name: "Agustin Golmar";
+    available from 12:00 to 18:00 on TUESDAY;
+    available from 12:00 to 18:00 on THURSDAY;
+    can teach Algoritmos;
+    can teach BaseDeDatos;
+}
+
+professor Nicolas {
+    name: "Nicolas Dominguez";
+    available from 09:00 to 17:00 on FRIDAY;
+    can teach Redes;
+    can teach Algoritmos;
+}
+
+// Asignaciones
+Ana teaches ATLyC from 10:00 to 13:00 on MONDAY in _201;
+Ana teaches SO from 14:00 to 17:00 on WEDNESDAY in _202;
+
+Agustin teaches BaseDeDatos from 12:00 to 14:00 on TUESDAY in _202;
+Agustin teaches Algoritmos from 14:00 to 17:00 on THURSDAY in _301;
+
+Nicolas teaches Redes from 09:00 to 11:00 on FRIDAY in _301;
+Nicolas teaches Algoritmos from 11:00 to 13:00 on FRIDAY in _301;
+
+// Demandas
+45 students require ATLyC;
+60 students require Algoritmos;
+40 students require BaseDeDatos;
+35 students require Redes;
+50 students require SO;

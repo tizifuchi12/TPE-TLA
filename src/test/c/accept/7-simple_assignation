@@ -1,0 +1,37 @@
+// Configuración global
+university open from 08:00 to 22:00;
+class duration between 1h and 3h;
+
+// Aula
+classroom _105 { name: "Aula 105"; building: "Edificio A"; capacity: 40; has "projector"; }
+
+// Curso
+course ATLyC {
+    name: "Autómatas";
+    hours: 6;
+    requires "projector";
+}
+
+// Profesor
+
+professor Agustin {
+    name: "Agustin Golmar";
+    available from 08:00 to 09:00 on MONDAY;
+    can teach ATLyC;
+}
+
+professor Ana {
+    name: "Ana Arias";
+    available from 13:00 to 16:00 on TUESDAY;
+    available from 20:00 to 22:00 EVERYDAY;
+    can teach ATLyC;
+}
+
+// Asignación
+Ana teaches ATLyC from 13:00 to 16:00 on TUESDAY in _105;
+
+// Demanda
+38 students require ATLyC;
+
+// Preferencia
+Ana prefers to teach ATLyC on TUESDAY;

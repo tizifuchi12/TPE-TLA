@@ -1,0 +1,22 @@
+university open from 08:00 to 22:00;
+class duration between 2h and 5h;
+
+classroom _504T { name: "504T"; building: "SDT"; capacity: 70; has "lab"; has "projector"; }
+
+course Algoritmos {
+    name: "Algoritmos";
+    hours: 8;
+    requires "lab";
+}
+
+professor Agustin {
+    name: "M. Agustin Golmar";
+    available from 12:00 to 20:00 on THURSDAY;
+    available from 12:00 to 15:00 on FRIDAY;
+    can teach Algoritmos;
+}
+
+Agustin prefers to teach Algoritmos from 12:00 to 15:00 on FRIDAY;
+
+
+50 students require Algoritmos;
