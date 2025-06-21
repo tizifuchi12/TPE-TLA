@@ -54,6 +54,7 @@ endif ()
 # The header files (*.h extension), are automatically included from the source-codes.
 add_executable(Compiler
 	src/main/c/backend/code-generation/Generator.c
+	src/main/c/backend/code-generation/SymbolTable.c
 	src/main/c/EntryPoint.c
 	src/main/c/frontend/lexical-analysis/FlexActions.c
 	src/main/c/frontend/lexical-analysis/FlexScanner.c
